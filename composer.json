@@ -1,0 +1,8 @@
+{
+    "name": "transmutor/pico",
+    "version": "dev-master",
+    "dist": {
+        "url": "https://github.com/transmutor/pico/archive/master.zip",
+        "type": "zip"
+    }
+}
