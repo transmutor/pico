@@ -1,5 +1,6 @@
 <?php
 /*
+        public domain
         explain $sql, $rs, $r, $flds
         function connect()
         function database($s)
