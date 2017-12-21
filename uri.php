@@ -1,7 +1,10 @@
 <?php
 
 
-        /* parse a uri into components according to RFC 2396, substituting missing values from $base */
+        /*
+          public domain
+          parse a uri into components according to RFC 2396, substituting missing values from $base 
+        */
         function uri($s, $base = null) { // see appendix B, http://www.ietf.org/rfc/rfc2396.txt
 
         if (empty($s)) return(array());
