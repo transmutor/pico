@@ -1,4 +1,7 @@
 <?php
+/*
+        public domain
+*/
 
 function displayselect($c) {
 	if (isset($c['options']) && is_array($c['options'])) {
