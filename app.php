@@ -1,4 +1,7 @@
 <?php
+/*
+        public domain
+*/
 
 	date_default_timezone_set(mem('timezone', 'UTC', 'default'));
 
