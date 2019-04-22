@@ -10,18 +10,21 @@
 		return(round(((float)$a[0] + (float)$a[1]) * 1000000));
 	}
 
-  function slug($s) {
-      /* lowercase and remove unwanted characters from string */
-      return(empty($s) ? null : strtolower(preg_replace('/\s+/', '-', preg_replace('/[^\w \.\-]/', '', trim($s)))));
-  }
+	function slug($s) {
+		/* lowercase and remove unwanted characters from string */
+		return(empty($s) ? null : strtolower(preg_replace('/\s+/', '-', preg_replace('/[^\w \.\-]/', '', trim($s)))));
+	}
 
 	function truncate($s, $n, $htmlescape = 1) {
 		return((isset($n) && $n > 0 && strlen($s) > $n) ? ($htmlescape ? (htmlescape(substr($s, 0, $n)) . '&hellip;') : (substr($s, 0, $n) . '�')) : ($htmlescape ? htmlescape($s) : $s));
 	}
+	function is_sql($x) {
+		return (isset($x) && (is_numeric($x) || (is_string($x) && strlen(trim($x)) > 0)));
+	}
 
-  function csvescape($s) {
-    return('"' . str_replace('"', '""', $s) . '"');
-  } 
+	function csvescape($s) {
+		return('"' . str_replace('"', '""', $s) . '"');
+	}
 
 	/* add a string to the end of a string or array and return string */
 	function addon($v, $s, $d = ' ') {
@@ -47,7 +50,7 @@
 	}
 
 	if (!function_exists('session')) {
-    function session($k, $v = null, $cmd = null) {
+		function session($k, $v = null, $cmd = null) {
 		  return(kv($_SESSION, $k, $v, $cmd));
 		}
 	}
@@ -425,7 +428,7 @@
 			$select =& $frm['select'];
 		} else {
 			$select = array(); foreach($flds as $f) if ( (!isset($f['mode']) || ($f['mode'] & 1)) && isset($f['name']) && isset($f['type']) && (!isset($f['truncate']) || !empty($f['truncate']))) {
-				$select[] = empty($f['source']) ? $db->quote($f['name']) : (((!empty($f['type']) && $f['type'] == 'expr') ? $f['source'] : $db->quote($f['source'])) . ' AS ' . $db->quote($f['name']));
+				$select[] = !is_sql($f['source']) ? $db->quote($f['name']) : (((!empty($f['type']) && $f['type'] == 'expr') ? $f['source'] : $db->quote($f['source'])) . ' AS ' . $db->quote($f['name']));
 			}
 		}
 
@@ -434,7 +437,7 @@
 			$keys = array_keys($flds);
 			foreach (getsort($flds, 'sort') as $c => $v) {
 				$f = $flds[$keys[($c - 1)]];
-				$name = empty($f['source']) ? $db->quote($f['name']) : ($f['type'] == 'expr' ? $f['source'] : $db->quote($f['source']));
+				$name = !is_sql($f['source']) ? $db->quote($f['name']) : ($f['type'] == 'expr' ? $f['source'] : $db->quote($f['source']));
 				$order[] = $name . ' ' . ($v > 0 ? 'ASC' : 'DESC');
 			}
 		}
