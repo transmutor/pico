@@ -2,7 +2,8 @@
     "packages": {
         "transmutor/pico": {
             "dev-master": { @composer.json },
-            "0.0.3": { @composer.json }
+            "0.0.3": { @composer.json },
+            "0.0.4": { @composer.json }
         }
     }
 }
