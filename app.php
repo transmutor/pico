@@ -653,6 +653,8 @@
 
 	function run($obj, $cmd, $a = null, $entrypoint = 0, $api = 0) {
 
+		global $argc;
+
 		if ($info = load($obj, $cmd)) {
 			if (!empty($info['auth']) && ($auth = mem('user.auth', 0, 'default')) < $info['auth']) {
 				if ($auth) {
@@ -683,11 +685,16 @@
 		}
 
 		if (empty($error) && empty($notfound) && empty($redirect)) {
-			ob_start();
-			$html = $info['function']($a);
-			if (strlen($x = ob_get_contents())) $html = $x;
-			ob_end_clean();
-			if ((!isset($info['comment']) || $info['comment']) && is_string($html) && mem('comments')) $html = comment('start: ' . $obj . '/' . $cmd . '.php') . (!empty($info['div']) || !isset($info['div']) ? div($html, array('class'=>($obj . ' ' . $cmd))) : $html) . comment('end: ' . $obj . '/' . $cmd . '.php');
+			if (empty($argc)) {
+				ob_start();
+				$html = $info['function']($a);
+				if (strlen($x = ob_get_contents())) $html = $x;
+				ob_end_clean();
+				if ((!isset($info['comment']) || $info['comment']) && is_string($html) && mem('comments')) $html = comment('start: ' . $obj . '/' . $cmd . '.php') . (!empty($info['div']) || !isset($info['div']) ? div($html, array('class'=>($obj . ' ' . $cmd))) : $html) . comment('end: ' . $obj . '/' . $cmd . '.php');
+			} else {
+				// no buffering if run from command line
+				$html = $info['function']($a);
+			}
 		}
 
 
