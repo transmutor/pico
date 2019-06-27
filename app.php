@@ -415,6 +415,9 @@
 		global $db;
 
 		$t = tick();
+		
+		$database = isset($frm['db']) ? $frm['db'] : $db; 
+		
 		if (empty($frm['controls'])) $frm['controls'] = array();
 		$flds =& $frm['controls'];
 		$frm['page'] = empty($frm['page']) ? ((!empty($frm['nopager']) || empty($_GET['page'])) ? 1 : intval($_GET['page'])) : $frm['page'];
@@ -428,7 +431,7 @@
 			$select =& $frm['select'];
 		} else {
 			$select = array(); foreach($flds as $f) if ( (!isset($f['mode']) || ($f['mode'] & 1)) && isset($f['name']) && isset($f['type']) && (!isset($f['truncate']) || !empty($f['truncate']))) {
-				$select[] = !is_sql($f['source']) ? $db->quote($f['name']) : (((!empty($f['type']) && $f['type'] == 'expr') ? $f['source'] : $db->quote($f['source'])) . ' AS ' . $db->quote($f['name']));
+				$select[] = !is_sql($f['source']) ? $database->quote($f['name']) : (((!empty($f['type']) && $f['type'] == 'expr') ? $f['source'] : $database->quote($f['source'])) . ' AS ' . $database->quote($f['name']));
 			}
 		}
 
@@ -437,7 +440,7 @@
 			$keys = array_keys($flds);
 			foreach (getsort($flds, 'sort') as $c => $v) {
 				$f = $flds[$keys[($c - 1)]];
-				$name = !is_sql($f['source']) ? $db->quote($f['name']) : ($f['type'] == 'expr' ? $f['source'] : $db->quote($f['source']));
+				$name = !is_sql($f['source']) ? $database->quote($f['name']) : ($f['type'] == 'expr' ? $f['source'] : $database->quote($f['source']));
 				$order[] = $name . ' ' . ($v > 0 ? 'ASC' : 'DESC');
 			}
 		}
@@ -453,10 +456,10 @@
 			'group by' => empty($frm['group by']) ? '' : $frm['group by'],
 			'having' => empty($frm['having']) ? '' : $frm['having'],
 			'order by' => $order,
-			'limit' => (empty($frm['limit']) ? (empty($frm['pagesize']) ? null : $db->limit($frm['pagesize'] * ($frm['page'] - 1), $frm['pagesize'])) : $frm['limit']),
+			'limit' => (empty($frm['limit']) ? (empty($frm['pagesize']) ? null : $database->limit($frm['pagesize'] * ($frm['page'] - 1), $frm['pagesize'])) : $frm['limit']),
 		);
 
-		$frm['rsdata'] = $db->select($sql, $flds);
+		$frm['rsdata'] = $database->select($sql, $flds);
 
 		if (!empty($frm['sortlinks'])) {
 			$flds = sortlinks($flds);
@@ -479,7 +482,7 @@
 			$countexpr = empty($frm['count']) ? 'COUNT(*)' : $frm['count'];
 			$sqlcount = array_merge($sql, array('select'=>$countexpr, 'limit'=>null, 'order by'=>null, 'group by'=>null));
 			if (!empty($frm['countfrom'])) $sqlcount['from'] = $frm['countfrom']; // removing joined tables can speed count query
-			$frm['max'] = $db->sql2one($sqlcount);
+			$frm['max'] = $database->sql2one($sqlcount);
 
 			if ($frm['max'] > $frm['pagesize']) {
 				$info = pager($_GET, 'page', $frm['pagesize'], $frm['max'], $frm['pagelinkcount']);
