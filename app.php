@@ -731,12 +731,12 @@
 					if (!empty($html['notfound'])) return(notfound($a));
 					if (!empty($html['html'])) return($html['html']);
 				} else {
+					mem('raw', 1);
 					if (empty($error) && empty($notfound) && empty($redirect)) {
-						mem('raw', 1);
 						$html['title'] = mem('title');
 						return(json_encode($html));
 					} else {
-						return(compact('error', 'notfound', 'redirect'));
+						return(json_encode(compact('error', 'notfound', 'redirect')));
 					}
 				}
 			} else {
