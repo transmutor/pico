@@ -4,7 +4,9 @@
             "dev-master": { @composer.json },
             "0.0.3": { @composer.json },
             "0.0.4": { @composer.json },
-            "0.0.5": { @composer.json }
+            "0.0.5": { @composer.json },
+            "0.0.6": { @composer.json },
+            "0.0.7": { @composer.json }
         }
     }
 }
