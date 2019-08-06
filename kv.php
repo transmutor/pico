@@ -36,4 +36,9 @@
                 }
         }
 
+	/* remember or recall a value */
+	function mem($k, $v = null, $cmd = null) {
+		static $mem = array();
+		return(kv($mem, $k, $v, $cmd));
+	}
 ?>
