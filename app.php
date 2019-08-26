@@ -426,7 +426,7 @@
 			$select =& $frm['select'];
 		} else {
 			$select = array(); foreach($flds as $f) if ( (!isset($f['mode']) || ($f['mode'] & 1)) && isset($f['name']) && isset($f['type']) && (!isset($f['truncate']) || !empty($f['truncate']))) {
-				$select[] = !is_sql($f['source']) ? $database->quote($f['name']) : (((!empty($f['type']) && $f['type'] == 'expr') ? $f['source'] : $database->quote($f['source'])) . ' AS ' . $database->quote($f['name']));
+				$select[] = !isset($f['source']) || !is_sql($f['source']) ? $database->quote($f['name']) : (((!empty($f['type']) && $f['type'] == 'expr') ? $f['source'] : $database->quote($f['source'])) . ' AS ' . $database->quote($f['name']));
 			}
 		}
 
