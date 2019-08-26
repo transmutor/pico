@@ -1,6 +1,6 @@
 {
     "name": "transmutor/pico",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "dist": {
         "url": "https://github.com/transmutor/pico/archive/v0.0.10.zip",
         "type": "zip"
