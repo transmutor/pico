@@ -457,7 +457,7 @@
 		$frm['rsdata'] = $database->select($sql, $flds);
 
 		if (!empty($frm['sortlinks'])) {
-			$flds = sortlinks($flds);
+			$flds = sortlinks($flds, 'sort', (!isset($frm['sortlinksmulticolumn']) || !empty($frm['sortlinksmulticolumn']))); // multicolumn on by default
 			foreach($flds as $k => $f) {
 				if (!empty($f['label']) && empty($f['nosortlinks']) && (!isset($f['mode']) || ($f['mode'] & 1))) {
 					if (isset($f['linksort0'])) $flds[$k]['label'] .= '&nbsp;' . a(mem('linksortascimg', '&#x21E7;', 'default'), array('href'=>$f['linksort0'], 'class'=>'s0 sort-asc', 'title'=>say('Sort Ascending')));
@@ -578,9 +578,9 @@
 		return($sorts);
 	}
 
-	function sortlinks($flds, $pname = 'sort') {
+	function sortlinks($flds, $pname = 'sort', $multicolumn = 1) {
 		$sorts = getsort($flds, $pname);
-		$nextsort = count($sorts) + 1;
+		$nextsort = empty($multicolumn) ? 1 : (count($sorts) + 1); // allow sorting by more than 1 column
 		if (is_array($flds)) {
 			foreach (array_keys($flds) as $k => $v) {
 				$c =& $flds[$v];
