@@ -434,9 +434,11 @@
 		if (!empty($frm['sortlinks'])) {
 			$keys = array_keys($flds);
 			foreach (getsort($flds, 'sort') as $c => $v) {
-				$f = $flds[$keys[($c - 1)]];
-				$name = !is_sql($f['source']) ? $database->quote($f['name']) : ($f['type'] == 'expr' ? $f['source'] : $database->quote($f['source']));
-				$order[] = $name . ' ' . ($v > 0 ? 'ASC' : 'DESC');
+				if (isset($keys[($c - 1)]) && isset($flds[$keys[($c - 1)]])) {
+					$f = $flds[$keys[($c - 1)]];
+					$name = !is_sql($f['source']) ? $database->quote($f['name']) : ($f['type'] == 'expr' ? $f['source'] : $database->quote($f['source']));
+					$order[] = $name . ' ' . ($v > 0 ? 'ASC' : 'DESC');
+				}
 			}
 		}
 
